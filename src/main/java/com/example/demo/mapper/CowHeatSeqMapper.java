@@ -24,6 +24,11 @@ import java.util.List;
 @Component
 public interface CowHeatSeqMapper {
 
+    /**
+     *
+     * @param cow
+     * @return
+     */
     CowHeatSeqPO selectOneById(CowHeatSeqPO cow);
 
     int insert(CowHeatSeqPO cowHeatSeqPO);

@@ -17,6 +17,11 @@ import java.util.List;
 @Component
 public interface CowMapper {
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     Cow selectById(Long id);
 
     List<Cow> selectByCowAndPage(@Param("cow") Cow cow, @Param("page") PageContent page);

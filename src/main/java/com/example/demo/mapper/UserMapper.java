@@ -22,7 +22,6 @@ import java.util.List;
 @Component
 public interface UserMapper {
 
-//    @Select("select * from user where id = #{id}")
     User selectById(Long id);
 
 //    @Select("<script>\n" +

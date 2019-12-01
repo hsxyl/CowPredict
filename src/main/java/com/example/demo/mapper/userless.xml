@@ -1,0 +1,41 @@
+<script>
+    select * from cow
+    <where>
+        <if test = "id != null">
+            and id = #{id}
+        </if>
+        <if test = "name != null">
+            and name = #{name}
+        </if>
+    </where>
+</script>
+
+<script>
+select * from user
+<where>
+    <if test = "id != null">
+        and id = #{id}
+    </if>
+    <if test = "userName != null">
+        and username = #{userName}
+    </if>
+    <if test = "passWord != null">
+        and password = #{password}
+    </if>
+</where>
+</script>
+
+<script>
+    update user
+    <set>
+        <if test="userName!=null">
+            username = #{userName},
+        </if>
+        <if test="passWord!=null">
+            password = #{passWord},
+        </if>
+    </set>
+    wherer id = #{id}
+</script>
+
+        update user set password = #{passWord} where id = #{id}
