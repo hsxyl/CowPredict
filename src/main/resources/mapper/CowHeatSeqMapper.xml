@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.CowHeatSeqMapper">
+
+    <resultMap id="CowHeatSeqResultMap" type="com.example.demo.Model.CowHeatSeqPO">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="startTime" column="start_time" jdbcType="INTEGER" />
+        <result property="heats" column="heats" jdbcType="VARCHAR" />
+        <result property="timeUnit" column="time_unit" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="table">
+        cow_heat_seq
+    </sql>
+
+    <sql id="columns">
+        id,start_time,heats,time_unit
+    </sql>
+
+    <sql id="insert_columns">
+        start_time,heats,time_unit
+    </sql>
+
+    <sql id="whereStat">
+        <where>
+            <if test="id!=null">
+                id = #{id}
+            </if>
+        </where>
+    </sql>
+
+    <sql id="setStat">
+        <set>
+            <if test="startTime!=null">
+                start_time = #{startTime},
+            </if>
+            <if test="heats!=null">
+                heats = #{heats},
+            </if>
+            <if test="timeUnit!=null">
+                time_unit = #{timeUnit},
+            </if>
+        </set>
+    </sql>
+
+    <select id="selectOneById" resultMap="CowHeatSeqResultMap">
+        select * from
+        <include refid="table"/>
+        <include refid="whereStat"/>
+    </select>
+
+    <insert id="insert" parameterType="com.example.demo.Model.CowHeatSeqPO" >
+        INSERT INTO
+        <include refid="table"/>
+        (<include refid="insert_columns"/>)
+        VALUES
+        (#{startTime},#{heats},#{timeUnit})
+    </insert>
+
+    <update id="update">
+        UPDATE
+        <include refid="table"/>
+        <include refid="setStat"/>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE
+        FROM
+        <include refid="table"/>
+        <include refid="whereStat"/>
+    </delete>
+
+</mapper>

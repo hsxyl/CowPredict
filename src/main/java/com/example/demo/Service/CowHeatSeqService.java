@@ -1,16 +1,21 @@
 package com.example.demo.Service;
 
-import com.example.demo.Mapper.CowHeatSeqMapper;
+import com.example.demo.Model.vo.ForecastSeqVO;
+import com.example.demo.mapper.CowHeatSeqMapper;
 import com.example.demo.Model.CowHeatSeq;
+import com.example.demo.Model.CowHeatSeqPO;
 import com.example.demo.Model.param.CreateHeatSeqParam;
 import com.example.demo.Model.param.ForecastCowHeatSeqParam;
 import com.example.demo.Model.param.SaveHeatSeqParam;
 import com.example.demo.Model.vo.CowHeatVO;
+import com.example.demo.Model.vo.ForecastCowHeatSeqVO;
+import com.example.demo.algo.Predict;
 import com.example.demo.constant.Global;
 import com.example.demo.convert.CowHeatSeqConvert;
 import com.example.demo.util.MyCollectionUtil;
 import com.example.demo.util.OffsetDateTimeUtil;
 import com.github.signaflo.timeseries.TimeSeries;
+import com.github.signaflo.timeseries.forecast.Forecast;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +28,7 @@ import java.util.List;
  * @create 2019/11/2
  */
 @Service
-public class CowHeatService {
+public class CowHeatSeqService {
 
     @Autowired
     CowHeatSeqMapper seqMapper;
@@ -39,11 +44,11 @@ public class CowHeatService {
         CowHeatVO cowHeatSeq = new CowHeatVO();
         cowHeatSeq.setHeats(heats);
         cowHeatSeq.setStartTime(param.getStartTime());
-        cowHeatSeq.setTimeUnit(Global.TIME_UNIT.unitLength());
         return cowHeatSeq;
     }
 
-    public boolean saveCowHeatSeq(SaveHeatSeqParam param) {
+    public int saveCowHeatSeq(SaveHeatSeqParam param) {
+
         CowHeatSeq cowHeatSeq = new CowHeatSeq();
         cowHeatSeq.setCowId(param.getCowId());
 
@@ -52,12 +57,30 @@ public class CowHeatService {
                         OffsetDateTimeUtil.fromLong(param.getStartTime()),
                         MyCollectionUtil.listToArray(param.getHeats()));
         cowHeatSeq.setTimeSeries(timeSeries);
-        seqMapper.insert(CowHeatSeqConvert.seqToPO(cowHeatSeq));
-        return true;
+        CowHeatSeqPO cowHeatSeqPO = CowHeatSeqConvert.seqToPO(cowHeatSeq);
+        return seqMapper.insert(cowHeatSeqPO);
     }
 
-    public  forecastCowHeatSeq(ForecastCowHeatSeqParam param){
-        
+
+    public ForecastSeqVO forecastSeq(ForecastCowHeatSeqParam param) {
+        Forecast forecast = Predict.predict(param);
+        ForecastSeqVO forecastSeqVO = new ForecastSeqVO();
+        forecastSeqVO.setResult(forecast.pointEstimates().asList());
+        return forecastSeqVO;
+    }
+
+    public ForecastCowHeatSeqVO forecastCowHeatSeq(ForecastCowHeatSeqParam param){
+
+        int bound = (int)(param.getHeats().size()*param.getRatio());
+        List right = param.getHeats().subList(bound,param.getHeats().size());
+        Forecast forecast = Predict.predict(param,bound);
+
+        ForecastCowHeatSeqVO vo = new ForecastCowHeatSeqVO();
+        vo.setRatio(param.getRatio());
+        vo.setForecast(forecast.pointEstimates().asList());
+        vo.setMse(Predict.esm(right,forecast.pointEstimates().asList()));
+        vo.setL2(Predict.l2(right,forecast.pointEstimates().asList()));
+        return vo;
     }
 
 }

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.DeviceMapper">
+
+    <resultMap id="DeviceResultMap" type="com.example.demo.Model.Device">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="cowId" column="cow_id" jdbcType="INTEGER" />
+        <result property="buyTime" column="buy_time" jdbcType="VARCHAR" />
+        <result property="installTime" column="install_time" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="table">
+        cow_device
+    </sql>
+
+    <sql id="columns">
+        id,cow_id,buy_time,install_time
+    </sql>
+
+    <sql id="insert_columns">
+        cow_id,buy_time,install_time
+    </sql>
+
+    <sql id="whereDeviceStat">
+        <where>
+            <if test="device.id!=null">
+                id = #{device.id}
+            </if>
+            <if test="device.cowId!=null">
+                and cow_id = #{device.cowId}
+            </if>
+            <if test="device.buyTime!=null">
+                and buy_time = #{device.buyTime}
+            </if>
+            <if test="device.installTime!=null">
+                and install_time = #{device.installTime}
+            </if>
+        </where>
+    </sql>
+
+    <sql id="whereStat">
+        <where>
+            <if test="id!=null">
+                id = #{id}
+            </if>
+            <if test="cowId!=null">
+                and cow_id = #{cowId}
+            </if>
+            <if test="buyTime!=null">
+                and buy_time = #{buyTime}
+            </if>
+            <if test="installTime!=null">
+                and install_time = #{installTime}
+            </if>
+        </where>
+    </sql>
+
+    <sql id="setStat">
+        <set>
+            <if test="buyTime!=null">
+                buy_time = #{buyTime},
+            </if>
+            <if test="installTime!=null">
+                install_time = #{installTime},
+            </if>
+        </set>
+    </sql>
+
+    <sql id="pageStat">
+        <if test="page!=null">
+            limit #{page.start},#{page.pageSize}
+        </if>
+    </sql>
+
+    <select id="selectByDeviceAndPage" resultMap="DeviceResultMap">
+        select * from
+        <include refid="table"/>
+        <include refid="whereDeviceStat" />
+        <include refid="pageStat"/>
+    </select>
+
+    <select id="selectById" resultMap="DeviceResultMap">
+        select * from
+        <include refid="table"/>
+        <include refid="whereStat"/>
+    </select>
+
+    <select id="selectOne" resultMap="DeviceResultMap">
+        select * from
+        <include refid="table"/>
+        <include refid="whereStat"/>
+    </select>
+
+    <insert id="insert" parameterType="com.example.demo.Model.Device" >
+        INSERT INTO
+        <include refid="table"/>
+        (<include refid="insert_columns"/>)
+        VALUES
+        (#{cowId}, #{buyTime}, #{installTime})
+    </insert>
+
+    <update id="update">
+        UPDATE
+        <include refid="table"/>
+        <include refid="setStat"/>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE
+        FROM
+        <include refid="table"/>
+        <include refid="whereStat"/>
+    </delete>
+
+</mapper>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--namespace是命名空间，是mapper接口的全路径-->
+<mapper namespace="com.example.demo.mapper.UserMapper">
+
+    <!--resultMap – 是最复杂也是最强大的元素，用来描述如何从数据库结果集中来加载对象-->
+    <resultMap id="userResultMap" type="com.example.demo.Model.User">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR" />
+        <result property="passWord" column="pass_word" jdbcType="VARCHAR" />
+        <result property="privilege" column="privilege" jdbcType="VARCHAR" />
+        <result property="registerTime" column="register_time" jdbcType="VARCHAR" />
+        <result property="email" column="email" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="table">
+        user
+    </sql>
+    
+    <!--sql – 可被其他语句引用的可重用语句块-->
+    <sql id="colums">
+        id,user_name,pass_word,privilege,register_time,email
+    </sql>
+
+    <sql id="whereUserStat">
+        <where>
+            <if test="user.id!=null">
+                id = #{user.id}
+            </if>
+            <if test="user.userName!=null">
+                and user_name = #{user.userName}
+            </if>
+            <if test="user.passWord!=null">
+                and pass_word = #{user.passWord}
+            </if>
+            <if test="user.privilege!=null">
+                and privilege = #{user.privilege}
+            </if>
+            <if test="user.registerTime!=null">
+                and register_time = #{user.registerTime}
+            </if>
+            <if test="user.email!=null">
+                and email = #{user.email}
+            </if>
+        </where>
+    </sql>
+
+    <sql id="whereStat">
+        <where>
+            <if test="id!=null">
+                id = #{id}
+            </if>
+            <if test="userName!=null">
+                and user_name = #{userName}
+            </if>
+            <if test="passWord!=null">
+                and pass_word = #{passWord}
+            </if>
+            <if test="privilege!=null">
+                and privilege = #{privilege}
+            </if>
+            <if test="registerTime!=null">
+                and register_time = #{registerTime}
+            </if>
+            <if test="email!=null">
+                and email = #{email}
+            </if>
+        </where>
+    </sql>
+
+    <sql id="setStat">
+        <set>
+            <if test="userName!=null">
+                user_name = #{userName},
+            </if>
+            <if test="passWord!=null">
+                pass_word = #{passWord},
+            </if>
+            <if test="privilege!=null">
+                privilege = #{privilege},
+            </if>
+            <if test="registerTime !=null">
+                register_time = #{registerTime},
+            </if>
+            <if test="email!=null">
+                email = #{email},
+            </if>
+        </set>
+    </sql>
+
+    <sql id="pageStat">
+        <if test="page!=null">
+            limit #{page.start},#{page.pageSize}
+        </if>
+    </sql>
+
+    <select id="selectByUserAndPage" resultMap="userResultMap">
+        select * from
+        <include refid="table"/>
+        <include refid="whereUserStat" />
+        <include refid="pageStat"/>
+    </select>
+
+    <select id="selectById" resultMap="userResultMap">
+        select * from
+        <include refid="table"/>
+        <include refid="whereStat"/>
+    </select>
+
+    <select id="selectOne" resultMap="userResultMap">
+        select * from
+        <include refid="table"/>
+        <include refid="whereStat"/>
+    </select>
+
+    <insert id="insert" parameterType="com.example.demo.Model.User" >
+       INSERT INTO
+       <include refid="table"/>
+        (user_name,pass_word,privilege,register_time,email)
+        VALUES
+        (#{userName}, #{passWord}, #{privilege}, #{registerTime},#{email})
+    </insert>
+
+    <update id="update">
+        UPDATE
+        <include refid="table"/>
+        <include refid="setStat"/>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+       DELETE
+       FROM
+       <include refid="table"/>
+       <include refid="whereStat"/>
+    </delete>
+
+</mapper>

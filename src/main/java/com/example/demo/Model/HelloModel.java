@@ -1,32 +1,15 @@
 package com.example.demo.Model;
 
+import lombok.Data;
+import lombok.experimental.Accessors;
+
+import java.nio.channels.Channel;
+
+@Data
+@Accessors(chain = true)
 public class HelloModel {
-    private long Id;
+    private long id;
 
-    public long getId() {
-        return Id;
-    }
-
-    public void setId(long id) {
-        Id = id;
-    }
-
-    public String getTitle() {
-        return Title;
-    }
-
-    public void setTitle(String title) {
-        Title = title;
-    }
-
-    public String getText() {
-        return Text;
-    }
-
-    public void setText(String text) {
-        Text = text;
-    }
-
-    private String Title;
-    private String Text;
+    private String title;
+    private String text;
 }

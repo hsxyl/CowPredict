@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.CowMapper">
+
+    <resultMap id="CowResultMap" type="com.example.demo.Model.Cow">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR" />
+        <result property="old" column="old" jdbcType="INTEGER" />
+        <result property="catchTime" column="catch_time" jdbcType="VARCHAR" />
+        <result property="weight" column="weight" jdbcType="DOUBLE" />
+        <result property="breedStatus" column="breed_status" jdbcType="VARCHAR" />
+        <result property="isHeat" column="is_heat" jdbcType="BOOLEAN"/>
+    </resultMap>
+
+    <sql id="table">
+        cow
+    </sql>
+
+    <sql id="columns">
+        id,name,old,catch_time,weight,breed_status,is_heat
+    </sql>
+
+    <sql id="insert_columns">
+        name,old,catch_time,weight,breed_status,is_heat
+    </sql>
+
+    <sql id="whereCowStat">
+        <where>
+            <if test="cow.id!=null">
+                id = #{cow.id}
+            </if>
+            <if test="cow.name!=null">
+                and name = #{cow.name}
+            </if>
+            <if test="cow.old!=null">
+                and old = #{cow.old}
+            </if>
+            <if test="cow.catchTime!=null">
+                and catch_time = #{cow.catchTime}
+            </if>
+            <if test="cow.weight!=null">
+                and weight = #{cow.weight}
+            </if>
+            <if test="cow.breedStatus!=null">
+                and breed_status = #{cow.breedStatus}
+            </if>
+            <if test="cow.isHeat!=null">
+                and is_heat = #{cow.isHeat}
+            </if>
+        </where>
+    </sql>
+
+    <sql id="whereStat">
+        <where>
+            <if test="id!=null">
+                id = #{id}
+            </if>
+            <if test="name!=null">
+                and name = #{name}
+            </if>
+            <if test="old!=null">
+                and old = #{old}
+            </if>
+            <if test="catchTime!=null">
+                and catch_time = #{catchTime}
+            </if>
+            <if test="weight!=null">
+                and weight = #{weight}
+            </if>
+            <if test="breedStatus!=null">
+                and breed_status = #{breedStatus}
+            </if>
+            <if test="isHeat!=null">
+                and is_heat = #{isHeat}
+            </if>
+        </where>
+    </sql>
+
+    <sql id="setStat">
+        <set>
+            <if test="name!=null">
+                name = #{name},
+            </if>
+            <if test="old!=null">
+                old = #{old},
+            </if>
+            <if test="catchTime!=null">
+                catch_time = #{catchTime},
+            </if>
+            <if test="weight!=null">
+                weight = #{weight},
+            </if>
+            <if test="breedStatus!=null">
+                breed_status = #{breedStatus},
+            </if>
+            <if test="isHeat!=null">
+                is_heat = #{isHeat},
+            </if>
+        </set>
+    </sql>
+
+    <sql id="pageStat">
+        <if test="page!=null">
+            limit #{page.start},#{page.pageSize}
+        </if>
+    </sql>
+
+    <select id="selectByCowAndPage" resultMap="CowResultMap">
+        select * from
+        <include refid="table"/>
+        <include refid="whereCowStat" />
+        <include refid="pageStat"/>
+    </select>
+
+    <select id="selectById" resultMap="CowResultMap">
+        select * from
+        <include refid="table"/>
+        <include refid="whereStat"/>
+    </select>
+
+    <select id="selectOne" resultMap="CowResultMap">
+        select * from
+        <include refid="table"/>
+        <include refid="whereStat"/>
+    </select>
+
+    <insert id="insert" parameterType="com.example.demo.Model.Cow" >
+        INSERT INTO
+        <include refid="table"/>
+        (<include refid="insert_columns"/>)
+        VALUES
+        (#{name}, #{old}, #{catchTime}, #{weight},#{breedStatus},#{isHeat})
+    </insert>
+
+    <update id="update">
+        UPDATE
+        <include refid="table"/>
+        <include refid="setStat"/>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE
+        FROM
+        <include refid="table"/>
+        <include refid="whereStat"/>
+    </delete>
+
+</mapper>

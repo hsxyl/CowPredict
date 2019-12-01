@@ -1,6 +1,8 @@
 package com.example.demo.Model;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
+import sun.jvm.hotspot.utilities.Assert;
 
 /**
  * @author xushenbao
@@ -8,8 +10,27 @@ import lombok.Data;
  * @create 2019/11/2
  */
 @Data
-public class CowHeatPO {
-    int id;
-    long startTime;
+@Accessors(chain = true)
+public class CowHeatSeqPO {
+    /**
+     * id
+     */
+    Long id;
+    /**
+     * 开始时间
+     */
+    String startTime;
+    /**
+     * 温度
+     */
     String heats;
+    /**
+     * 时间单位
+     */
+    String timeUnit = "DAY";
+
+    public CowHeatSeqPO setTimeUnit(String timeUnit) {
+        this.timeUnit = timeUnit;
+        return this;
+    }
 }
