@@ -23,11 +23,6 @@ public class ForecastCowHeatSeqVO {
     List<Double> forecast;
 
     /**
-     * 比率
-     */
-    double ratio;
-
-    /**
      * 均方误差
      */
     double mse;
@@ -36,4 +31,8 @@ public class ForecastCowHeatSeqVO {
      * l2范式
      */
     double l2;
+    /**
+     * aic
+     */
+    double aic;
 }

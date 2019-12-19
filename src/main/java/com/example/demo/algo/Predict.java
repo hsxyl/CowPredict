@@ -1,6 +1,7 @@
 package com.example.demo.algo;
 
 import com.example.demo.Model.param.ForecastCowHeatSeqParam;
+import com.example.demo.Model.vo.ForecastCowHeatSeqVO;
 import com.example.demo.constant.Global;
 import com.example.demo.util.MyCollectionUtil;
 import com.example.demo.util.OffsetDateTimeUtil;
@@ -20,14 +21,18 @@ import java.util.List;
  * @create 2019/10/31
  */
 public class Predict {
-    public static Forecast predict(ForecastCowHeatSeqParam param,int bound) {
+    public static ForecastCowHeatSeqVO predict(ForecastCowHeatSeqParam param,int bound) {
+        ForecastCowHeatSeqVO vo = new ForecastCowHeatSeqVO();
         TimeSeries timeSeries =
                 TimeSeries.from(Global.TIME_UNIT,
                         OffsetDateTimeUtil.fromString(param.getStartTime()),
                                 MyCollectionUtil.listToArray(param.getHeats().subList(0,bound)));
         ArimaOrder modelOrder = ArimaOrder.order(0,1,1,0,1,1);
-        Arima model = Arima.model(timeSeries,modelOrder);
-        return model.forecast(param.getHeats().size()-bound);
+        Arima model = Arima.model(timeSeries,modelOrder,Global.TIME_PERIOD);
+        Forecast forecast = model.forecast(param.getHeats().size()-bound);
+        vo.setAic(model.aic());
+        vo.setForecast(forecast.pointEstimates().asList());
+        return vo;
     }
 
     /**

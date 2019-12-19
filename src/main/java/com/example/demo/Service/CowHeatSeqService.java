@@ -73,13 +73,10 @@ public class CowHeatSeqService {
 
         int bound = (int)(param.getHeats().size()*param.getRatio());
         List right = param.getHeats().subList(bound,param.getHeats().size());
-        Forecast forecast = Predict.predict(param,bound);
+        ForecastCowHeatSeqVO vo = Predict.predict(param,bound);
 
-        ForecastCowHeatSeqVO vo = new ForecastCowHeatSeqVO();
-        vo.setRatio(param.getRatio());
-        vo.setForecast(forecast.pointEstimates().asList());
-        vo.setMse(Predict.esm(right,forecast.pointEstimates().asList()));
-        vo.setL2(Predict.l2(right,forecast.pointEstimates().asList()));
+        vo.setMse(Predict.esm(right, vo.getForecast()));
+        vo.setL2(Predict.l2(right, vo.getForecast()));
         return vo;
     }
 
