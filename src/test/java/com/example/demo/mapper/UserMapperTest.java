@@ -1,8 +1,8 @@
 package com.example.demo.mapper;
 
 import com.example.demo.DemoApplicationTests;
-import com.example.demo.Model.PageContent;
-import com.example.demo.Model.User;
+import com.example.demo.model.PageContent;
+import com.example.demo.model.User;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;

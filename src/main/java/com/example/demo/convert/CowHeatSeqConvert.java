@@ -1,7 +1,7 @@
 package com.example.demo.convert;
 
-import com.example.demo.Model.CowHeatSeq;
-import com.example.demo.Model.CowHeatSeqPO;
+import com.example.demo.model.CowHeatSeq;
+import com.example.demo.model.CowHeatSeqPO;
 import com.example.demo.util.OffsetDateTimeUtil;
 
 import java.util.Arrays;

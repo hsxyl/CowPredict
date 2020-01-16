@@ -3,7 +3,7 @@
 
 <mapper namespace="com.example.demo.mapper.CowHeatSeqMapper">
 
-    <resultMap id="CowHeatSeqResultMap" type="com.example.demo.Model.CowHeatSeqPO">
+    <resultMap id="CowHeatSeqResultMap" type="com.example.demo.model.CowHeatSeqPO">
         <id property="id" column="id" jdbcType="INTEGER"/>
         <result property="startTime" column="start_time" jdbcType="INTEGER" />
         <result property="heats" column="heats" jdbcType="VARCHAR" />
@@ -50,7 +50,7 @@
         <include refid="whereStat"/>
     </select>
 
-    <insert id="insert" parameterType="com.example.demo.Model.CowHeatSeqPO" >
+    <insert id="insert" parameterType="com.example.demo.model.CowHeatSeqPO" >
         INSERT INTO
         <include refid="table"/>
         (<include refid="insert_columns"/>)

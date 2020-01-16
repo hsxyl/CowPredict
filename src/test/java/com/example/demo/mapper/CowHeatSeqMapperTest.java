@@ -1,17 +1,13 @@
 package com.example.demo.mapper;
 
 import com.example.demo.DemoApplicationTests;
-import com.example.demo.Model.Cow;
-import com.example.demo.Model.CowHeatSeq;
-import com.example.demo.Model.CowHeatSeqPO;
+import com.example.demo.model.CowHeatSeqPO;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.util.Assert;
-
-import java.util.List;
 
 /**
  * @author xushenbao
@@ -44,7 +40,7 @@ public class CowHeatSeqMapperTest extends DemoApplicationTests {
 
     @Test
     public void test3Update() {
-        CowHeatSeqPO seqPO = new CowHeatSeqPO().setId(4L);
+        CowHeatSeqPO seqPO = new CowHeatSeqPO().setId(1L);
         seqPO = cowHeatSeqMapper.selectOneById(seqPO);
         seqPO.setHeats("11.2,323,222");
         int sum = cowHeatSeqMapper.update(seqPO);

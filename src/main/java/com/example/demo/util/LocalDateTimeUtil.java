@@ -1,7 +1,10 @@
 package com.example.demo.util;
 
+import org.springframework.cglib.core.Local;
+
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
@@ -63,7 +66,14 @@ public class LocalDateTimeUtil {
         return df.format(localDateTime);
     }
 
-
+    /**
+     * 转成秒
+     * @param localDateTime
+     * @return
+     */
+    public static long localDateTimeToSeconds(LocalDateTime localDateTime) {
+        return localDateTime.toEpochSecond(OffsetDateTime.now().getOffset());
+    }
     /**
      * 转成毫秒
      * @param localDateTime
@@ -85,6 +95,13 @@ public class LocalDateTimeUtil {
         ZoneId zone = ZoneId.systemDefault();
         return LocalDateTime.ofInstant(instant, zone);
     }
-
+    public static LocalDateTime dropMinuteAndSecond(LocalDateTime time) {
+       return LocalDateTime.of(
+               time.getYear(),
+               time.getMonth(),
+               time.getDayOfMonth(),
+               time.getHour(),
+               0,0) ;
+    }
 
 }

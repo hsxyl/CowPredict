@@ -3,7 +3,7 @@
 
 <mapper namespace="com.example.demo.mapper.DeviceMapper">
 
-    <resultMap id="DeviceResultMap" type="com.example.demo.Model.Device">
+    <resultMap id="DeviceResultMap" type="com.example.demo.model.Device">
         <id property="id" column="id" jdbcType="INTEGER"/>
         <result property="cowId" column="cow_id" jdbcType="INTEGER" />
         <result property="buyTime" column="buy_time" jdbcType="VARCHAR" />
@@ -92,7 +92,7 @@
         <include refid="whereStat"/>
     </select>
 
-    <insert id="insert" parameterType="com.example.demo.Model.Device" >
+    <insert id="insert" parameterType="com.example.demo.model.Device" >
         INSERT INTO
         <include refid="table"/>
         (<include refid="insert_columns"/>)

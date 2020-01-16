@@ -18,14 +18,12 @@ public enum CowbreedStatusEnum {
      * 正常
      */
     NORMAL;
-
     /**
      * 名字map
      */
     private static final Map<String,CowbreedStatusEnum> namesMap= Arrays
                .stream(CowbreedStatusEnum.values())
                .collect(Collectors.toMap(Enum::name, Function.identity()));
-
     /**
      * 包含
      * @param name
@@ -33,5 +31,23 @@ public enum CowbreedStatusEnum {
      */
     public static boolean contain(String name) {
         return namesMap.containsKey(name);
+    }
+
+    /**
+     * 转换成中文
+     * @param name
+     * @return
+     */
+    public static String convertToCh(String name) {
+        if(name.equals("NOTFERTILIZED")) {
+            return "未受精";
+        }
+        if(name.equals("LACTATION")) {
+            return "泌乳";
+        }
+        if(name.equals("NORMAL")){
+            return "正常";
+        }
+        return "其他";
     }
 }

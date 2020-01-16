@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<!-- 右键点项目，Run As下边Maven build... 然后goals输入mybatis-generator:generate。 -->
+<generatorConfiguration>
+
+    <classPathEntry location="/Users/xushenbao/.m2/repository/mysql/mysql-connector-java/5.1.46/mysql-connector-java-5.1.46.jar" />
+
+    <context id="cow_db" targetRuntime="MyBatis3">
+        <!-- 配置内置的或者自定义的Plugin -->
+        <!--<plugin algorithmType="com.sankuai.meituan.waimai.digger.plugins.MysqlPaginationPlugin" />-->
+        <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin" />
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://39.105.138.189:3306/cow?serverTimezone=GMT%2B8&amp;useSSL=false&amp;allowPublicKeyRetrieval=true"
+                        userId="root"
+                        password="881208">
+        </jdbcConnection>
+
+        <javaModelGenerator targetPackage="com.example.demo.sql.entity" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="sqlmapper" targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <javaClientGenerator type="MIXEDMAPPER" targetPackage="com.example.demo.sql.mapper" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+        <table tableName="true_cow_temperature" schema="">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+            <columnOverride column="time" property="time" typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime" />
+            <columnOverride column="value" property="value" javaType="java.lang.Double"/>
+        </table>
+        <table tableName="cow" schema="">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+            <columnOverride column="catch_time" property="catchTime" typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"/>
+        </table>
+   </context>
+
+
+</generatorConfiguration>

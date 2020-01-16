@@ -40,5 +40,11 @@ public class ResultVO {
         resultVO.setMsg(message);
         return resultVO;
     }
+    public static ResultVO fail(Throwable throwable) {
+        ResultVO resultVO = new ResultVO();
+        resultVO.setCode(500);
+        resultVO.setMsg(throwable.getMessage());
+        return resultVO;
+    }
 
 }

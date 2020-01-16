@@ -1,8 +1,7 @@
 package com.example.demo.mapper;
 
 import com.example.demo.DemoApplicationTests;
-import com.example.demo.Model.Cow;
-import com.example.demo.Model.Device;
+import com.example.demo.model.Device;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;

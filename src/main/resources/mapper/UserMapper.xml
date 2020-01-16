@@ -5,7 +5,7 @@
 <mapper namespace="com.example.demo.mapper.UserMapper">
 
     <!--resultMap – 是最复杂也是最强大的元素，用来描述如何从数据库结果集中来加载对象-->
-    <resultMap id="userResultMap" type="com.example.demo.Model.User">
+    <resultMap id="userResultMap" type="com.example.demo.model.User">
         <id property="id" column="id" jdbcType="INTEGER"/>
         <result property="userName" column="user_name" jdbcType="VARCHAR" />
         <result property="passWord" column="pass_word" jdbcType="VARCHAR" />
@@ -114,7 +114,7 @@
         <include refid="whereStat"/>
     </select>
 
-    <insert id="insert" parameterType="com.example.demo.Model.User" >
+    <insert id="insert" parameterType="com.example.demo.model.User" >
        INSERT INTO
        <include refid="table"/>
         (user_name,pass_word,privilege,register_time,email)
