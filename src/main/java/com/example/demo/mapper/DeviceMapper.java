@@ -1,8 +1,7 @@
 package com.example.demo.mapper;
 
-import com.example.demo.Model.Cow;
-import com.example.demo.Model.Device;
-import com.example.demo.Model.PageContent;
+import com.example.demo.model.Device;
+import com.example.demo.model.PageContent;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
