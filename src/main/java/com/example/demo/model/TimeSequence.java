@@ -1,7 +1,6 @@
-package com.sankuai.meituan.tsp.digger.horae.core.algorithms.common;
+package com.example.demo.model;
 
-import com.sankuai.meituan.tsp.digger.base.gungnir.util.DateTimeUtil;
-import com.sankuai.meituan.tsp.digger.horae.core.domain.TimeSeriesData;
+import com.example.demo.util.LocalDateTimeUtil;
 import lombok.Data;
 import org.springframework.util.Assert;
 
@@ -49,17 +48,17 @@ public class TimeSequence {
         return true;
     }
 
-    public TimeSequence(TimeSeriesData timeSeriesData) {
-        this.beginDateTime = timeSeriesData.getBeginDateTime();
-        this.endDateTime = timeSeriesData.getEndDateTime();
-        this.duration = timeSeriesData.getDuration();
-        this.timeDataList = timeSeriesData.getTimeSeriesValueListWithDefault(0);
-    }
     public TimeSequence(LocalDateTime beginDateTime, LocalDateTime endDateTime, Duration duration, List<Double> timeDataList) {
+        long size = (LocalDateTimeUtil.localDateTimeToSeconds(endDateTime)-
+                LocalDateTimeUtil.localDateTimeToSeconds(beginDateTime))/duration.getSeconds()+1;
+        Assert.isTrue(size==timeDataList.size(),
+                String.format("开始结束时间与值列表个数不匹配,begin:%s,end:%s,timeDataList.size():%d",beginDateTime,endDateTime,timeDataList.size()));
+
         this.beginDateTime = beginDateTime;
         this.endDateTime = endDateTime;
         this.duration = duration;
         this.timeDataList = timeDataList;
+
     }
 
 
@@ -83,7 +82,7 @@ public class TimeSequence {
      */
     private int getIndex(LocalDateTime index) {
         // 偏移量
-        long offset = DateTimeUtil.toEpochSeconds(index) - DateTimeUtil.toEpochSeconds(this.beginDateTime);
+        long offset = LocalDateTimeUtil.localDateTimeToSeconds(index) - LocalDateTimeUtil.localDateTimeToSeconds(this.beginDateTime);
         Assert.isTrue(offset>=0,"传入时间不能小于开始时间");
         Assert.isTrue(offset%duration.getSeconds()==0,"无该时间点的时序数据");
         return (int)(offset/duration.getSeconds());

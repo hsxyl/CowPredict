@@ -1,19 +1,8 @@
 package com.example.demo.mapper;
 
-import com.example.demo.Model.Cow;
-import com.example.demo.Model.CowHeatSeq;
-import com.example.demo.Model.CowHeatSeqPO;
-import com.example.demo.Model.PageContent;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
+import com.example.demo.model.CowHeatSeqPO;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * @author xushenbao
