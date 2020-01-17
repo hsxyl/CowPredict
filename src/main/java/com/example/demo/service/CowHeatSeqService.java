@@ -1,5 +1,6 @@
 package com.example.demo.service;
-
+import com.example.demo.model.TimeSequence;
+import com.example.demo.model.bo.CowHeatPredictBO;
 import com.example.demo.model.vo.ForecastSeqVO;
 import com.example.demo.mapper.CowHeatSeqMapper;
 import com.example.demo.model.CowHeatSeq;
@@ -13,6 +14,7 @@ import com.example.demo.algo.Predict;
 import com.example.demo.constant.Global;
 import com.example.demo.convert.CowHeatSeqConvert;
 import com.example.demo.sql.entity.TrueCowTemperature;
+import com.example.demo.sql.entity.TrueCowTemperatureExample;
 import com.example.demo.sql.mapper.TrueCowTemperatureMapper;
 import com.example.demo.util.MyCollectionUtil;
 import com.example.demo.util.OffsetDateTimeUtil;
@@ -23,7 +25,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author xushenbao
@@ -34,7 +38,7 @@ import java.util.List;
 public class CowHeatSeqService {
 
     @Autowired
-    CowHeatSeqMapper seqMapper;
+    CowHeatSeqMapper cowHeatSeqMapper;
     @Autowired
     TrueCowTemperatureMapper trueCowTemperatureMapper;
 
@@ -63,7 +67,7 @@ public class CowHeatSeqService {
                         MyCollectionUtil.listToArray(param.getHeats()));
         cowHeatSeq.setTimeSeries(timeSeries);
         CowHeatSeqPO cowHeatSeqPO = CowHeatSeqConvert.seqToPO(cowHeatSeq);
-        return seqMapper.insert(cowHeatSeqPO);
+        return cowHeatSeqMapper.insert(cowHeatSeqPO);
     }
 
 
@@ -86,13 +90,51 @@ public class CowHeatSeqService {
     }
 
     /**
+     * 获取预测用的原始数据
+     * @param cowId 奶牛id
+     * @param predictStartTime 预测开始时间
+     * @return
+     */
+    public TimeSequence getOriginValueForPredict(Integer cowId, LocalDateTime predictStartTime) {
+        TrueCowTemperatureExample example = new TrueCowTemperatureExample();
+        LocalDateTime beginTime = predictStartTime.minusSeconds(Global.DURATION.getSeconds()*(Global.PREDICT_BASE_SUM));
+        LocalDateTime endTime = predictStartTime.minusSeconds(Global.DURATION.getSeconds());
+        example.or()
+                .andCowIdEqualTo(cowId)
+                .andTimeBetween(
+                        beginTime,
+                        endTime);
+        List<TrueCowTemperature> trueCowTemperatureList = trueCowTemperatureMapper
+                .selectByExample(example)
+                .stream()
+                .sorted(Comparator.comparing(TrueCowTemperature::getTime))
+                .collect(Collectors.toList());
+        return new TimeSequence(
+                trueCowTemperatureList.get(0).getTime(),
+                trueCowTemperatureList.get(trueCowTemperatureList.size()-1).getTime(),
+                Global.DURATION,
+                trueCowTemperatureList.stream()
+                        .map(TrueCowTemperature::getValue)
+                        .collect(Collectors.toList()));
+    }
+
+    /**
      * 预测奶牛体温
      * @param originValue 原始数据
      * @param predictNum 预测个数
      * @param beginTime 开始时间
      * @return
      */
-    public List<Double> predictCowHeat(List<Double> originValue, int predictNum, LocalDateTime beginTime) {
-        return Predict.predict(beginTime,predictNum,originValue).getTimeSequence().getTimeDataList();
+    public CowHeatPredictBO predictCowHeat(List<Double> originValue, int predictNum, LocalDateTime beginTime) {
+        beginTime = LocalDateTime.of(
+                beginTime.getYear(),
+                beginTime.getMonth(),
+                beginTime.getDayOfMonth(),
+                beginTime.getHour(),0,0);
+        TimeSequence timeSequence  = Predict.predict(beginTime,predictNum,originValue);
+        return new CowHeatPredictBO(
+                timeSequence.getBeginDateTime(),
+                timeSequence.getEndDateTime(),
+                timeSequence.getTimeDataList());
     }
 }

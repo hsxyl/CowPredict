@@ -39,7 +39,7 @@ public class Predict {
         return vo;
     }
 
-    public static CowHeatPredictBO predict(LocalDateTime startTime, int predictNum, List<Double> originValue) {
+    public static TimeSequence predict(LocalDateTime startTime, int predictNum, List<Double> originValue) {
         TimeSeries timeSeries = TimeSeries.from(
                 Global.TIME_UNIT,
                 OffsetDateTimeUtil.fromLocalDateTime(startTime),
@@ -49,10 +49,10 @@ public class Predict {
         Forecast forecast = model.forecast(predictNum);
         TimeSequence timeSequence = new TimeSequence(
                 startTime,
-                startTime.plusSeconds(Global.DURATION.getSeconds()*originValue.size()),
+                startTime.plusSeconds(Global.DURATION.getSeconds()*(predictNum-1)),
                 Global.DURATION,
                 forecast.pointEstimates().asList());
-        return new CowHeatPredictBO().setTimeSequence(timeSequence);
+        return timeSequence;
     }
     /**
      * 预测

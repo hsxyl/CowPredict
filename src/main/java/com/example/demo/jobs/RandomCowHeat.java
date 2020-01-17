@@ -38,12 +38,18 @@ public class RandomCowHeat {
             CowExample cowExample = new CowExample();
             cowExample.or().andIdIsNotNull();
             List<Cow> cowList = cowMapper.selectByExample(cowExample);
-            LocalDateTime localDateTime = LocalDateTime.now();
+            // 当前时间
+            LocalDateTime now = LocalDateTime.now();
+            // 创建时间点的时间，去除当前时间的分，秒
+            LocalDateTime createTime = LocalDateTime.of(now.getYear(),
+                    now.getMonth(),
+                    now.getDayOfMonth(),
+                    now.getHour(),0,0);
             for (Cow cow : cowList) {
                 trueCowHeatsService.insertOrUpdateTimePoint(
                         cow.getId(),
-                        localDateTime,
-                        CowHeatTemplate.generatePoint(localDateTime));
+                        createTime,
+                        CowHeatTemplate.generatePoint(createTime));
             }
         } catch (Exception e) {
             log.error("Fail to do Job<createCowHeat2Hour>,cause:",e);

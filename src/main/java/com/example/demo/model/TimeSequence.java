@@ -83,8 +83,8 @@ public class TimeSequence {
     private int getIndex(LocalDateTime index) {
         // 偏移量
         long offset = LocalDateTimeUtil.localDateTimeToSeconds(index) - LocalDateTimeUtil.localDateTimeToSeconds(this.beginDateTime);
-        Assert.isTrue(offset>=0,"传入时间不能小于开始时间");
-        Assert.isTrue(offset%duration.getSeconds()==0,"无该时间点的时序数据");
+        Assert.isTrue(offset>=0,"传入时间不能小于开始时间"+index);
+        Assert.isTrue(offset%duration.getSeconds()==0,"无该时间点的时序数据"+index);
         return (int)(offset/duration.getSeconds());
     }
 }
